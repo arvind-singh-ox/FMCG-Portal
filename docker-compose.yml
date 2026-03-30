@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  # Service 1: Next.js Application (Frontend + Backend)
+  ifactory:
+    build: .
+    container_name: ifactory-app
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env.local
+    restart: always
+    # depends_on:
+    #   - mongo
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Service 2: Local MongoDB (uncomment to use instead of Atlas)
+  # To use: uncomment below + update .env.local:
+  # MONGO_URI=mongodb://mongo:27017/ifactory
+  #
+  # mongo:
+  #   image: mongo:7
+  #   container_name: ifactory-mongo
+  #   ports:
+  #     - "27017:27017"
+  #   volumes:
+  #     - mongo_data:/data/db
+  #   restart: always
+
+# volumes:
+#   mongo_data:
+
